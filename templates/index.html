@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>ML Application</title>    
+    
+    <script type="text/javascript" src="../static/jQuery.js"></script>
+    <script type="text/javascript" src="../static/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../static/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/chart.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/normalize.css">
+
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/prod.css">
+    <link rel="stylesheet" type="text/css" href="../static/tailwind.min.css">
+    <style>
+        .mBox{
+            width: 80%;
+            margin: 60px auto;
+        }        
+    </style>
+</head>
+<body>
+
+<header>
+	<h1>Deep Learning Based Language classification Application</h1>
+</header>
+
+<div class="flex-col mBox">
+    <h1 class="py-2 text-7xl font-bold text-center">Predict Language</h1>
+    <form class="my-4" id="DataForm" method="post" enctype="multipart/form-data">
+    	<div class="grid grid-cols-8 gap-8">
+    		<div class="col-span-6">
+              <label for="sel_img" class=" py-2 text-3xl px-2 block text-sm font-medium text-gray-700">
+              Select Image to upload.
+          	  </label>          	  
+              <input type="file" name="sel_img" id="sel_img" autocomplete="off" style="font-size: 1.875rem;line-height: 2.25rem;" class="mt-4 focus:ring-indigo-500 focus:border-indigo-700 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-4" required>
+            </div>    		
+    	</div>    	
+    </form>    
+    <p class="text-center py-2 text-3xl ">Predicted Language: <span id="lang"></span></p>
+    <button class="py-2 text-3xl px-2 bg-blue-500 rounded w-1/6 text-white my-6" style="margin-left: 42%;" id="btn">
+    	Detect
+	</button>
+</div>
+
+<hr>
+<footer>
+	<p>2023 © Ramrao Adik Institute Of Technology.</p>
+</footer>
+
+</body>
+<script type="text/javascript">
+	$('#btn').click(function() {
+		var fd = new FormData(); 
+        var files = $('#sel_img')[0].files[0]; 
+        fd.append('file', files);		
+
+	    $.ajax({
+	        url: '/api',
+	        enctype: 'multipart/form-data',
+	        data: fd,
+	        type: 'POST',
+	        contentType: false, 
+            processData: false, 
+	        success: function(response) {                
+	          CATEGORIES = ["bengali","hindi","kannada","malayallam","marathi","tamil","telugu"]
+	          var data = response;
+	          $("#lang").html(CATEGORIES[data]);	          
+	        },
+	        error: function(error) {
+	          console.log(error);
+	        }
+	    });
+  	});
+</script>
+</html>
